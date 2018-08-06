@@ -1,0 +1,496 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="css/YFsmart-fab.css">
+<link rel="stylesheet" type="text/css" href="css/base.css">
+<!-- Link Swiper's CSS -->
+<link rel="stylesheet" href="css/swiper.min.css">
+<title>YFsmart</title>
+</head>
+<body >
+	<div class="main-container">
+		<div class="brand-container">
+			<img class="brand-img" src="./images/yfsmart.png">
+		</div>
+		<div class="nav-container">
+			<ul class="nav-list">
+				<li>
+					<a href="/YFsoft/YFsmart/YFsmart-index.html">关于圆方</a>
+				</li>
+				<li>
+					<a href="/YFsoft/YFsmart/YFsmart-ycj.html">云采集</a>
+				</li>
+				<li>
+					<a class="currentshow" href="/YFsoft/YFsmart/YFsmart-fab.html">方案宝</a>
+				</li>
+				<li>
+					<a href="/YFsoft/YFsmart/YFsmart-lcb.html">量尺宝</a>
+				</li>
+			</ul>
+		</div>
+		<div class="data-container">
+			<ul class="data-list">
+				<li>
+					<h3 id="dealTotal" class="data-number"></h3>
+					<p class="data-name"><img id="totalUp" class="data-img" src="./images/up.png"/><img id="totalDown" class="data-img" src="./images/down.png"/><span id="dealTotalPercent" class="data-percent"></span><span class="data-txt">交易总额</span></p>
+				</li>
+				<li>
+					<h3 id="useTotal" class="data-number"></h3>
+					<p class="data-name"><img id="useUp" class="data-img" src="./images/up.png"/><img id="useDown" class="data-img" src="./images/down.png"/><span id="useTotalPercent" class="data-percent"></span><span class="data-txt">使用率</span></p>
+				</li>
+				<li>
+					<h3 id="uploadTotal" class="data-number"></h3>
+					<p class="data-name"><span class="data-txt">平台总方案</span></p>
+				</li>
+			</ul>
+		</div>
+		<div class="mac-container">
+			<div class="swiperbox">
+				<!-- Swiper -->
+			    <div class="banner swiper-container">
+			        <div class="parallax-bg" style="background-image:url(./images/macmodel05.jpg)" data-swiper-parallax="-46%"></div>
+			        <div class="swiper-wrapper">
+			            <div class="swiper-slide"></div>
+			            <div class="swiper-slide"></div>
+			            <div class="swiper-slide"></div>
+			        </div>
+			    </div>
+   			</div>
+		</div>
+		<div class="yfsmart-r">
+			<div class="echarts-title-container">
+				<div class="echarts-title">方案宝交易总览</div>
+				<div class="echarts-icon-container">
+					<div class="echarts-name-box">
+						<p class="echarts-name">总&nbsp;计</p>
+						<div class="echarts-icon yf"></div>
+					</div>
+				</div>
+				<div class="echarts-icon-container">
+					<div class="echarts-name-box">
+						<p class="echarts-name">维&nbsp;意</p>
+						<div class="echarts-icon wy"></div>
+					</div>
+				</div>
+				<div class="echarts-icon-container">
+					<div class="echarts-name-box">
+						<p class="echarts-name">尚&nbsp;品</p>
+						<div class="echarts-icon sp"></div>
+					</div>
+				</div>
+			</div>
+			<div id="deal-detail" class="echarts-function-container"></div>
+			<div class="echarts-title-container02">
+				<div class="echarts-title">集团0-1段设计师使用率</div>
+				<div class="echarts-icon-container">
+					<div class="echarts-name-box">
+						<p class="echarts-name">使用率</p>
+						<div class="echarts-icon userage"></div>
+					</div>
+				</div>
+			</div>
+			<div id="use-detail" class="echarts-function-container02"></div>
+			<div class="echarts-title-container03">
+				<div class="echarts-title">各楼层交易分布</div>
+				<div class="echarts-title">种子上架分布</div>
+			</div>
+			<div id="floor-detail" class="echarts-function-container04"></div>
+			<div id="upload-detail" class="echarts-function-container04"></div>
+		</div>
+	</div>
+	<!-- Swiper Jq -->
+	<script src="./js/jquery-2.0.3.min.js"></script>
+	<!-- Swiper JS -->
+    <script src="./js/swiper.min.js"></script>
+    <!-- Swiper JS -->
+    <script src="./js/echarts.js"></script>
+
+    <!-- Initialize Swiper -->
+    <script>
+	    var swiper = new Swiper('.banner.swiper-container', {
+	        pagination: '.swiper-pagination',
+	        paginationClickable: true,
+	        parallax: true,
+	        speed: 600,
+	        direction: 'vertical',
+	        autoplay: 1500
+	    });
+    </script>
+
+    <script type="text/javascript">
+    	function dealData(){
+	    	$.ajax({
+	    		url:"http://zmonitor.yfway.com/admin.php?s=/Api/data/func/1",
+	    		type:"get",
+                        dataType: "jsonp",
+	    		success:function(data){
+	    			//var data = $.parseJSON(data);
+	    			var time_list = data['x'], sp_list = data['series1'], wy_list = data['series2'], total_list = data['series3'];
+	    			var x_list = [];
+	    			for ( var i in time_list){
+	    				var a = time_list[i].substring(5,10);
+	    				x_list.push(a)
+	    			}
+	    			dealChart(x_list,sp_list,wy_list,total_list,"dealTotal","dealTotalPercent",['totalUp','totalDown'])
+	    		}
+	    	})
+    	};
+
+    	function dealChart(x_list,sp_list,wy_list,total_list,dealTotal,dealTotalPercent,stateimg){
+    		var myChart = echarts.init(document.getElementById('deal-detail'));
+
+    		var option = {
+				color :['#50cdf6','#db4d4c', '#ffb034'],
+				grid: {
+					top: '4%',
+			        left: '2%',
+			        right: '1%',
+			        bottom: '1%',
+			        containLabel: true
+			    },
+			    tooltip: {
+			        trigger: 'axis'
+			    },
+			    xAxis: [
+			        {
+			            type: 'category',
+			            data: x_list,
+			            axisLabel: {
+	                		"textStyle": {
+		                    	"fontFamily": "微软雅黑", 
+		                    	"fontSize": 16,
+		                    	"color":"#ccc"
+                    		}
+                		}
+			        }
+			    ],
+			    yAxis: [
+			        {
+			            type: 'value',
+			            nameTextStyle: {
+							color: "#ccc",
+							fontFamily: '微软雅黑',
+							fontSize: 14,
+						},
+			            min: 0,
+			            max: 4000,
+			            interval: 1000,
+			            axisLabel: {
+                			"textStyle": {
+		                    	"fontFamily": "微软雅黑", 
+		                    	"fontSize": 16,
+		                    	"color":"#ccc"
+	                    	}
+                		}
+			        },
+			        {
+			            type: 'value',
+			            nameTextStyle: {
+							color: "#ccc",
+							fontFamily: '微软雅黑',
+							fontSize: 14,
+						},
+			            min: 0,
+			            max: 4000,
+			            interval: 1000,
+			            axisLabel: {
+                			"textStyle": {
+		                    	"fontFamily": "微软雅黑", 
+		                    	"fontSize": 16,
+		                    	"color":"#ccc"
+	                    	}
+                		}
+			        }
+			    ],
+			    series: [
+			        {
+			            name:'尚品宅配',
+			            type:'bar',
+			            data: sp_list,
+			            barWidth : 18,//柱图宽度
+			        },
+			        {
+			            name:'维意',
+			            type:'bar',
+			            data: wy_list,
+			            barWidth : 18,//柱图宽度
+			        },
+			        {
+			            name:'交易总额',
+			            type:'line',
+			            yAxisIndex: 1,
+			            data: total_list
+			        }
+			    ]
+			};
+			// 使用刚指定的配置项和数据显示图表。
+        	myChart.setOption(option);
+
+        	// banner栏目数据增长与颜色显示状态变化
+            var newData = total_list[total_list.length-1];//把最新的数据定义
+            var lastData = total_list[total_list.length-2];//把上一期的数据定义
+            var differ = newData-lastData;//计算差值为后续状态判断准备
+			var result=differ/lastData*100;//计算百分比
+			document.getElementById(dealTotal).innerHTML=newData;//输出结果
+			document.getElementById(dealTotalPercent).innerHTML=parseInt(result)+'%';//输出结果
+            if(differ > 0){//对差值正负进行判断后改变样式颜色和图标显隐
+            	document.getElementById(dealTotalPercent).style.color="#ff2424";
+            	document.getElementById(stateimg[1]).style.display="none";
+            }
+            else{
+            	document.getElementById(dealTotalPercent).style.color="#22ac38";
+            	document.getElementById(stateimg[0]).style.display="none";
+            }
+            
+    	};
+
+    	function useData(){
+	    	$.ajax({
+	    		url:"http://zmonitor.yfway.com/admin.php?s=/Api/data/func/2",
+	    		type:"get",
+                        dataType: "jsonp",
+	    		success:function(data){
+	    			//var data = $.parseJSON(data);
+	    			var time_list = data['x'], use_list = data['series1'];
+	    			var x_list = [];
+	    			for ( var i in time_list){
+	    				var a = time_list[i].substring(5,10);
+	    				x_list.push(a)
+	    			}
+	    			useChart(x_list,use_list,"useTotal","useTotalPercent",['totalUp','totalDown'])
+	    		}
+	    	})
+    	};
+
+    	function useChart(x_list,use_list,useTotal,useTotalPercent,stateimg){
+    		var myChart = echarts.init(document.getElementById('use-detail'));
+
+    		var option = {
+					color :['#83b15a'],
+				    tooltip: {
+				        trigger: 'axis'
+				    },
+				    grid: {
+				    	top: '4%',
+				        left: '2%',
+				        right: '2%',
+				        bottom: '4%',
+				        containLabel: true
+				    },
+				    xAxis: {
+				        type: 'category',
+				        boundaryGap: false,
+				        data: x_list,
+				        axisLabel: {
+	                		"textStyle": {
+		                    	"fontFamily": "微软雅黑", 
+		                    	"fontSize": 16,
+		                    	"color":"#ccc"
+	                		}
+	            		}
+				    },
+				    yAxis: {
+				        type: 'value',
+				        axisLabel: {
+	                		"textStyle": {
+		                    	"fontFamily": "微软雅黑", 
+		                    	"fontSize": 16,
+		                    	"color":"#ccc"
+	                		}
+	            		}
+				    },
+				    series: [
+				        {
+				            name:'使用率',
+				            type:'line',
+				            stack: '总量',
+				            data: use_list
+				        }
+				    ]
+				};
+
+	        // 使用刚指定的配置项和数据显示图表。
+	        myChart.setOption(option);
+
+	        // banner栏目数据增长与颜色显示状态变化
+            var newData = use_list[use_list.length-1];//把最新的数据定义
+            var lastData = use_list[use_list.length-2];//把上一期的数据定义
+            var differ = newData-lastData;//计算差值为后续状态判断准备
+			var result=differ/lastData*100;//计算百分比
+			document.getElementById(useTotal).innerHTML=newData;//输出结果
+			document.getElementById(useTotalPercent).innerHTML=parseInt(result)+'%';//输出结果
+            if(differ > 0.5){//对差值正负进行判断后改变样式颜色和图标显隐
+            	document.getElementById(useTotalPercent).style.color="#ff2424";
+            	document.getElementById(stateimg[1]).style.display="none";
+            }
+            else{
+            	document.getElementById(useTotalPercent).style.color="#22ac38";
+            	document.getElementById(stateimg[0]).style.display="none";
+            }  
+	    }
+
+	    function floorData(){
+	    	$.ajax({
+	    		url:"http://zmonitor.yfway.com/admin.php?s=/Api/data/func/3",
+	    		type:"get",
+                        dataType: "jsonp",
+	    		success:function(data){
+	    			//var data = $.parseJSON(data);
+	    			var deal_list = data['series1'];
+	    			floorChart(deal_list)
+	    		}
+	    	})
+    	};
+
+    	function floorChart(deal_list){
+    		var myChart = echarts.init(document.getElementById('floor-detail'));
+
+    		var option = {
+				color :['#83b15a','#de9b32','#49b4d7','#bf4746'],
+				tooltip: {
+			        trigger: 'item',
+			        formatter: "{a} <br/>{b}: {c} ({d}%)"
+			    },
+			    legend: {
+			        orient: 'horizontal',
+			        y: 'bottom',
+			        data:['智库推荐','亮点设计','方案精选','特种种子'],
+			        textStyle: {
+						color: '#ccc',
+						fontFamily: '微软雅黑',
+						fontSize: '14',
+					}
+			    },
+			    series: [
+			        {
+			            name:'交易分布',
+			            type:'pie',
+			            radius: ['50%', '70%'],
+			            avoidLabelOverlap: false,
+			            center: ['50%', '40%'],
+			            label: {
+			                normal: {
+			                    show: false
+			                },
+			                emphasis: {
+			                    show: false
+			                }
+			            },
+			            labelLine: {
+			                normal: {
+			                    show: false
+			                }
+			            },
+			            data:[
+			                {value: deal_list[0], name:'智库推荐'},
+			                {value: deal_list[1], name:'亮点设计'},
+			                {value: deal_list[2], name:'方案精选'},
+			                {value: deal_list[3], name:'特种种子'}
+			            ]
+			        }
+			    ]
+			};
+
+	        // 使用刚指定的配置项和数据显示图表。
+	        myChart.setOption(option);
+    	};
+
+    	function uploadData(){
+	    	$.ajax({
+	    		url:"http://zmonitor.yfway.com/admin.php?s=/Api/data/func/4",
+	    		type:"get",
+                        dataType: "jsonp",
+	    		success:function(data){
+	    			//var data = $.parseJSON(data);
+	    			var upload_list = data['series1'];
+	    			uploadChart(upload_list,"uploadTotal")
+	    		}
+	    	})
+    	};
+
+    	function uploadChart(upload_list,uploadTotal){
+    		var myChart = echarts.init(document.getElementById('upload-detail'));
+
+    		var option = {
+				color :['#50cdf6','#db4d4c'],
+				tooltip: {
+			        trigger: 'item',
+			        formatter: "{a} <br/>{b}: {c} ({d}%)"
+			    },
+			    legend: {
+			        orient: 'horizontal',
+			        y: 'bottom',
+			        data:['尚品宅配','维意定制'],
+			        textStyle: {
+						color: '#ccc',
+						fontFamily: '微软雅黑',
+						fontSize: '12px',
+					}
+			    },
+			    series: [
+			        {
+			            name:'品牌分布',
+			            type:'pie',
+			            radius: ['50%', '70%'],
+			            avoidLabelOverlap: false,
+			            center: ['50%', '40%'],
+			            label: {
+			                normal: {
+			                    show: false
+			                },
+			                emphasis: {
+			                    show: false
+			                }
+			            },
+			            labelLine: {
+			                normal: {
+			                    show: false
+			                }
+			            },
+			            data:[
+			                {value: upload_list[0], name:'尚品宅配'},
+			                {value: upload_list[1], name:'维意定制'}
+			            ]
+			        }
+			    ]
+			};
+
+	        // 使用刚指定的配置项和数据显示图表。
+	        myChart.setOption(option);
+
+	        // banner栏目数据增长与颜色显示状态变化
+	        var uploadNum = upload_list[0]+upload_list[1];//计算数组的总数
+			document.getElementById(uploadTotal).innerHTML=uploadNum;//输出结果
+    	};
+
+    	function refreshData() {
+            dealData();
+            useData();
+            floorData();
+            uploadData();
+            setInterval(function(){//setInterval是设置间隔的意思
+                dealData();
+	            useData();
+	            floorData();
+	            uploadData();
+            }, 1000000);
+        }
+
+    	$(document).ready(function(){
+            refreshData()
+        });
+    </script>
+
+<!--     <script language="JavaScript">
+        function ok(){
+            var location = window.location.href;
+            var locations = location.split("/");
+            locations[locations.length-1] = 'YFsmart-lcb.html';
+            var newlocation = locations.join("/");
+            window.parent.parent.location.href=newlocation;
+            clearTimeout(id);
+        }
+        var id = window.setTimeout(ok, 64000);
+    </script> -->
+</body>
+</html>

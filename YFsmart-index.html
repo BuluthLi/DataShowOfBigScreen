@@ -1,0 +1,137 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="css/YFsmart-index.css">
+<link rel="stylesheet" type="text/css" href="css/base.css">
+<!-- Link Swiper's CSS -->
+<link rel="stylesheet" href="css/swiper.min.css">
+<title>YFsmart</title>
+</head>
+<body >
+	<div class="main-container">
+		<div class="brand-container">
+			<img class="brand-img" src="./images/yfsmart.png">
+		</div>
+		<div class="nav-container">
+			<ul class="nav-list">
+				<li>
+					<a class="currentshow" href="/YFsoft/YFsmart/YFsmart-index.html">关于圆方</a>
+				</li>
+				<li>
+					<a href="/YFsoft/YFsmart/YFsmart-ycj.html">云采集</a>
+				</li>
+				<li>
+					<a href="/YFsoft/YFsmart/YFsmart-fab.html">方案宝</a>
+				</li>
+				<li>
+					<a href="/YFsoft/YFsmart/YFsmart-lcb.html">量尺宝</a>
+				</li>
+			</ul>
+		</div>
+		<div class="data-container">
+			<marquee style="width: 100%; height: 100%" scrollamount="15" direction="left" class="yf-title" play-count="1">
+				新闻通知: 23周年，致敬凯旋和奋斗，风雨成就花样圆方
+			</marquee >
+		</div>
+		<div class="index-news-box">
+			<div class="banner-main-box">
+				<!-- Swiper -->
+			    <div class="swiper-container banner">
+			        <div class="swiper-wrapper">
+			        	<div class="swiper-slide"><img src="./images/mainbanner01.jpg"></div>
+			            <div class="swiper-slide"><img src="./images/mainbanner02.jpg"></div>
+			            <div class="swiper-slide"><img src="./images/mainbanner03.jpg"></div>
+			            <div class="swiper-slide"><img src="./images/mainbanner04.jpg"></div>
+			            <div class="swiper-slide"><img src="./images/mainbanner05.jpg"></div>
+			            <div class="swiper-slide"><img src="./images/mainbanner06.jpg"></div>
+			            <div class="swiper-slide"><img src="./images/mainbanner07.jpg"></div>
+			            <div class="swiper-slide"><img src="./images/mainbanner08.jpg"></div>
+			            <div class="swiper-slide"><img src="./images/mainbanner09.jpg"></div>
+			        </div>
+			        <!-- Add Pagination -->
+			        <div class="swiper-pagination banner"></div>
+			    </div>
+			</div>
+			<div class="news-box">
+				<!-- Swiper -->
+			    <div class="swiper-container news">
+			        <div class="swiper-wrapper" id="index_news">
+			            
+			        </div>
+
+			        <!-- Add Pagination -->
+			        <div class="swiper-pagination"></div>
+			    </div>
+			</div>
+		</div>
+
+		<div class="hidden-objs" style="display:none;">
+			<div class="news-item-template-container">
+				<div class="swiper-slide news">
+	            	<div class="echarts-title">圆方头条</div>
+	            	<div class="news-title"></div>
+	            	<div class="news-txt"></div>
+	            	<div class="news-img"><img src=""/></div>
+	            </div>
+			</div>
+		</div>
+
+		<script src="./js/jquery-2.0.3.min.js"></script>
+		<!-- Swiper JS -->
+    	<script src="./js/swiper.min.js"></script>
+
+		<!-- Initialize Swiper -->
+
+	    <script language="JavaScript">
+            function ok(){
+                var location = window.location.href;
+                var locations = location.split("/");
+                locations[locations.length-1] = 'YFsmart-ycj.html';
+                var newlocation = locations.join("/");
+                window.parent.parent.location.href=newlocation;
+                clearTimeout(id);
+            }
+            var id = window.setTimeout(ok, 100000);
+
+            $(document).ready(function(){
+            	var swiper = new Swiper('.swiper-container.banner', {
+                    effect : 'fade',
+                            fade: {
+                              crossFade: true,
+                            },
+                    pagination: '.swiper-pagination.banner',
+                    paginationClickable: true,
+                    centeredSlides: true,
+                    autoplay: 10000,
+                    autoplayDisableOnInteraction: false
+                });
+
+            	$.ajax({
+            		url:"http://ehome.yfway.com/news/lib.php",
+            		type: "get",
+            		dataType: "jsonp",
+            		success: function(data) {
+            			for (var i in data) {
+                                var showcover = 0 < data[i]['cover'].length ? true : false;
+                                $(".news-item-template-container .news-title").text(data[i]['title']);
+                                $(".news-item-template-container .news-txt").text(data[i]['text']);
+                                $(".news-item-template-container .news-img>img").attr("src", data[i]['cover']);
+                                if (showcover) $(".news-item-template-container .news-img>img").show();
+                                else $(".news-item-template-container .news-img>img").hide();
+                                var html = $(".news-item-template-container").html();
+                                $("#index_news").append(html);
+                            }
+                            
+                            var swiper = new Swiper('.swiper-container.news', {
+                                pagination: '.swiper-pagination.news',
+                                effect: 'flip',
+                                grabCursor: true,
+                                autoplay: 6000
+                            });
+            		}
+            	});
+            });
+        </script>
+</body>
+</html>
+

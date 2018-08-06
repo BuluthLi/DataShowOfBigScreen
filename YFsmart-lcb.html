@@ -1,0 +1,235 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="css/YFsmart-lcb.css">
+<link rel="stylesheet" type="text/css" href="css/base.css">
+<!-- Link Swiper's CSS -->
+<link rel="stylesheet" href="css/swiper.min.css">
+<title>YFsmart</title>
+</head>
+<body >
+	<div class="main-container">
+		<div class="brand-container">
+			<img class="brand-img" src="./images/yfsmart.png">
+		</div>
+		<div class="nav-container">
+			<ul class="nav-list">
+				<li>
+					<a href="/YFsoft/YFsmart/YFsmart-index.html">关于圆方</a>
+				</li>
+				<li>
+					<a href="/YFsoft/YFsmart/YFsmart-ycj.html">云采集</a>
+				</li>
+				<li>
+					<a href="/YFsoft/YFsmart/YFsmart-fab.html">方案宝</a>
+				</li>
+				<li>
+					<a class="currentshow" href="/YFsoft/YFsmart/YFsmart-lcb.html">量尺宝</a>
+				</li>
+			</ul>
+		</div>
+		<div class="data-container">
+			<ul class="data-list">
+				<li>
+					<h3 id="sendImg" class="data-number"></h3>
+					<p class="data-name"><img id="sendUp" class="data-img" src="./images/up.png"/><img id="sendDown" class="data-img" src="./images/down.png"/><span id="sendImgPercent" class="data-percent"></span><span class="data-txt">上传图片</span></p>
+				</li>
+			</ul>
+		</div>
+		<div class="phone-container">
+			<div class="swiperbox">
+				<!-- Swiper -->
+	    		<div class="banner swiper-container">
+	        		<div class="swiper-wrapper">
+			            <div class="swiper-slide"><img src="./images/model01.jpg"></div>
+			            <div class="swiper-slide"><img src="./images/model02.jpg"></div>
+			            <div class="swiper-slide"><img src="./images/model03.jpg"></div>
+			            <div class="swiper-slide"><img src="./images/model04.jpg"></div>
+	        		</div>
+	   			</div>
+   			</div>
+		</div>
+		<div class="yfsmart-r">
+			<div class="echarts-title-container">
+				<div class="echarts-title">上传照片趋势</div>
+				<div class="echarts-icon-container">
+					<div class="echarts-name-box">
+						<p class="echarts-name">上传量</p>
+						<div class="echarts-icon send"></div>
+					</div>
+				</div>
+			</div>
+			<div id="lcb-detail" class="echarts-function-container"></div>
+			<div class="echarts-title-container">
+				<div class="echarts-title">实时照片采集</div>
+			</div>
+			<div class="echarts-images-container">
+				<ul class="swiper-container" id="swiperImg"></ul>
+			</div>
+		</div>
+	</div>
+	<!-- Swiper jquery -->
+	<script src="./js/jquery-2.0.3.min.js"></script>
+	<!-- Swiper JS -->
+    <script src="./js/swiper.min.js"></script>
+    <!-- Swiper JS -->
+    <script src="./js/echarts.js"></script>
+
+    <!-- Initialize Swiper -->
+    <script>
+	    var swiper = new Swiper('.banner.swiper-container', {
+	        pagination: '.banner.swiper-pagination',
+	        paginationClickable: true,
+	        spaceBetween: 30,
+	        centeredSlides: true,
+	        autoplay: 8000,
+	        autoplayDisableOnInteraction: false
+    	});
+    </script>
+
+    <!-- 获取上传照片趋势和标注图片地址 -->
+    <script type="text/javascript">
+    	function makeChart(){
+    		$.ajax({
+    			url:"http://cloud.yfway.com/OpenAPI/?s=Log/getLogLcb",
+    			type:"get",
+    			success:function(data){
+    				var json = $.parseJSON(data);
+    				var list = json['data'];
+    				var x_list = [] , y_list = [];
+    				for(var i in list){
+    					var x = list[i]['writetime'];
+    					var y = list[i]['cnt10'];
+    					var a = x.substring(4,8);
+    					x_list.push(a);
+    					y_list.push(y)
+    				}
+    			myChart(x_list,y_list,"sendImg","sendImgPercent",['sendUp','sendDown']);
+    			}
+    		})
+    	};
+
+    	function makeSwiper(){
+    		$.ajax({
+    			url:"http://cloud.yfway.com/OpenAPI/?s=Log/getLogLcbImages/n/1/",
+    			type:"get",
+    			success:function(data){
+    				var json = $.parseJSON(data);
+    				var list = json['data'];
+    				var img_list = [];
+    				for( var i in list){
+    					var img = list[i]['file01'];
+    					img_list.push(img)
+    				}
+
+			     	var swiperItem = "";
+			     	for ( var i = 0; i < img_list.length; i++){
+			     		swiperItem = swiperItem + "<li><img src=\""+img_list[i]+"\"/></li>";
+			     	};
+			     	var myDiv = document.getElementById('swiperImg');
+			     	myDiv.innerHTML = swiperItem;
+    			}
+    		})
+    	}
+
+    	function myChart(x_list,y_list,sendImg,sendImgPercent,stateimg){
+    		var myChart = echarts.init(document.getElementById('lcb-detail'));
+
+    		var option = {
+				color :['#81d741','#ff9d0b'],
+				tooltip: {
+			        trigger: 'axis'
+			    },
+			    grid: {
+	                top: '4%',
+	                left: '2%',
+	                right: '2%',
+	                bottom: '4%',
+	                containLabel: true
+	            },
+			    xAxis: [
+			        {
+			            type: 'category',
+			            data: x_list,
+			            axisPointer: {
+			                type: 'shadow'
+			            },
+			            axisLabel: {
+	                        "textStyle": {
+	                            "fontFamily": "微软雅黑", 
+	                            "fontSize": 16,
+	                            "color":"#ccc"
+	                        }
+	                    }
+			        }
+			    ],
+			    yAxis: [
+			        {
+			            type: 'value',
+			            name: '水量',
+			            axisLabel: {
+	                        "textStyle": {
+	                            "fontFamily": "微软雅黑", 
+	                            "fontSize": 16,
+	                            "color":"#ccc"
+	                        }
+	                    }
+			        }
+			    ],
+			    series: [
+			        {
+			            name:'上传照片',
+			            type:'bar',
+			            barWidth: '50%',
+			            data: y_list
+			        },
+			        {
+			            name:'趋势线',
+			            type:'line',
+			            data: y_list
+			        }
+			    ]
+			};
+			// 使用刚指定的配置项和数据显示图表。
+        	myChart.setOption(option);
+
+        	var newData = y_list[y_list.length-1];//把最新的数据定义
+        	var lastData = y_list[y_list.length-2];//把倒数第二的数据定义
+        	var differ = newData-lastData;//计算差值为后续状态判断准备
+        	var result=differ/lastData*100;//计算百分比
+        	document.getElementById(sendImg).innerHTML=newData;//输出结果
+        	document.getElementById(sendImgPercent).innerHTML=parseInt(result)+'%';//输出结果
+        	if(differ > 0){//对差值正负进行判断后改变样式颜色和图标显隐
+            	document.getElementById(sendImgPercent).style.color="#ff2424";
+            	document.getElementById(stateimg[1]).style.display="none";
+            }
+            else{
+            	document.getElementById(sendImgPercent).style.color="#22ac38";
+            	document.getElementById(stateimg[0]).style.display="none";
+            }
+    	};
+    	function refreshData() {
+            makeChart();
+            setInterval(function(){//setInterval是设置间隔的意思
+            	makeChart();
+            }, 1000000)
+        };
+    	$(document).ready(function(){
+    		makeSwiper();
+    		refreshData();
+    	});
+    </script>
+
+    <script language="JavaScript">
+        function ok(){
+            var location = window.location.href;
+            var locations = location.split("/");
+            locations[locations.length-1] = 'YFsmart-index.html';
+            var newlocation = locations.join("/");
+            window.parent.parent.location.href=newlocation;
+            clearTimeout(id);
+        }
+        var id = window.setTimeout(ok, 64000);
+    </script>
+</body>
+</html>

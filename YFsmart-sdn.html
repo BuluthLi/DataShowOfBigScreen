@@ -1,0 +1,664 @@
+<!-- itemStyle里的label和axisLabel属性，分别控制中心内容和坐标轴的相关显示 -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Echarts</title>
+    <link rel="stylesheet" type="text/css" href="css/YFsmart-sdn.css">
+    <link rel="stylesheet" type="text/css" href="css/base.css">
+    <!-- Link Swiper's CSS -->
+    <link rel="stylesheet" href="css/swiper.min.css">
+</head>
+
+<body>
+    <div class="main-container">
+        <div class="brand-container">
+            <img class="brand-img" src="./images/yfsmart.png">
+        </div>
+        <div class="nav-container">
+            <ul class="nav-list">
+                <li>
+                    <a href="/YFsoft/YFsmart/YFsmart-index.html">关于圆方</a>
+                </li>
+
+                <li>
+                    <a class="currentshow" href="/YFsoft/YFsmart/YFsmart-sdn.html">圣诞鸟商城</a>
+                </li>
+                <li>
+                    <a href="/YFsoft/YFsmart/YFsmart-ycj.html">云采集</a>
+                </li>
+                <li>
+                    <a href="/YFsoft/YFsmart/YFsmart-fab.html">方案宝</a>
+                </li>
+
+                <li>
+                    <a href="/YFsoft/YFsmart/YFsmart-lcb.html">量尺宝</a>
+                </li>
+            </ul>
+        </div>
+        <div class="data-container">
+            <ul class="data-list">
+                <li>
+                    <h2 class="data-number"></h2>
+                    <p class="data-name">总用户量</p>
+                </li>
+                <li>
+                    <h2 class="data-number"></h2>
+                    <p class="data-name">本周新增用户量</p>
+                </li>
+                <li>
+                    <h2 class="data-number"></h2>
+                    <p class="data-name">本周订单总量</p>
+                </li>
+                <li>
+                    <h2 class="data-number"></h2>
+                    <p class="data-name">商品数量</p>
+                </li>
+
+            </ul>
+        </div>
+        <div class="main-box">
+            <div class="echarts-container">
+                <div class="echarts-bar">
+                    <div class="echarts-big-box">
+                        <div class="echarts-title-container">
+                            <div class="echarts-title">销售日报</div>
+                            <div class="echarts-icon-container">
+                                <div class="echarts-name-box">
+                                    <p class="echarts-name">订单总量</p>
+                                    <div class="echarts-icon wy"></div>
+                                </div>
+                            </div>
+                            <div class="echarts-icon-container">
+                                <div class="echarts-name-box">
+                                    <p class="echarts-name">商品数量</p>
+                                    <div class="echarts-icon yf"></div>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <div id="echarts-bar"></div>
+                </div>
+                <div class="echarts-pie">
+                    <div class="echarts-title-container02">
+
+                        <div class="echarts-title02">分销角色</div>
+                        <div class="echarts-icon-container else">
+                            <div class="echarts-name-box">
+                                <p class="echarts-name">铁军</p>
+                                <div class="echarts-icon" style="background:#BE4948 ;"></div>
+                            </div>
+                        </div>
+                        <div class="echarts-icon-container else">
+                            <div class="echarts-name-box ">
+                                <p class="echarts-name">店长</p>
+                                <div class="echarts-icon " style="background: #4391D9;"></div>
+                            </div>
+                        </div>
+                        <div class="echarts-icon-container else">
+                            <div class="echarts-name-box">
+                                <p class="echarts-name">分销老板</p>
+                                <div class="echarts-icon" style="background: #86CFD8;"></div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div id="echarts-pie"></div>
+                </div>
+                <!-- 分销top10 -->
+                <div class="photo-container">
+                    <div class="swiper-box" id="top10">
+                        <!-- js生成 -->
+
+
+                    </div>
+                    <div class="swiper-box" id="christmas">
+                        <!-- js生成 -->
+
+                    </div>
+                </div>
+                <div class="column-rank" id="hotsale">
+
+                    <!-- js生成 -->
+
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="img">
+        <div class="img-phone">
+            <img src="./images/ip6.png" alt="">
+            <div class="swiper-container float">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                        <img src="./images/1.png" alt="">
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="./images/2.png" alt="">
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="./images/3.png" alt="">
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="./images/4.png" alt="">
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="./images/5.png" alt="">
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="./images/6.png" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    </div>
+    <script src="./js/jquery-2.0.3.min.js"></script>
+    <!-- Swiper JS -->
+    <script src="./js/swiper.min.js"></script>
+    <script src="./js/echarts.js"></script>
+    <script type="text/javascript">
+
+        let flag = false;
+        //制作swiper效果,注意swiper实例初始化的时间
+        let mySwiper, mySwiper2, mySwiper3, mySwiper4 = new Swiper('.swiper-container.float', {
+            // autoplay: true,
+            direction: 'horizontal',
+            // slidesPerView: 1,
+            // speed: 600,
+            autoplay: 10000,
+            loop: true,
+        });
+
+
+        //标头数据动态获取函数
+        function getHeadNum() {
+            $.ajax({
+                url: 'http://zmonitor.yfway.com/admin.php?s=/Api/data/func/9',
+                type: 'get',
+                dataType: 'jsonp',
+                success: (res) => {
+                    console.log(res);
+                    useHeadData(res);
+                }
+            });
+        }
+        //数字处理函数
+        function handleData(num) {
+            num=num.toString();
+            // console.log(num)
+            //没处理一次，后三个数据就不需要处理了
+            for (var i = 0; i < Math.floor((num.length - (1 + i)) / 3); i++) {
+                num = num.substring(0, num.length - (4 * i + 3)) + ',' + num.substring(num.length - (4 * i + 3));
+            }
+            // console.log('执行了');
+            return num;
+
+        }
+        //使用表头数据
+        function useHeadData(res) {
+            let total_num = handleData(res.user_totle * 10 + Math.floor(Math.random() * 10));
+            let add_num = handleData(res.user_add * 10 + Math.floor(Math.random() * 10));
+            console.log('数据：',total_num,add_num);
+            $('.data-number').eq(0).html(total_num);
+            $('.data-number').eq(1).html(add_num);
+
+            // }
+        }
+
+        //配置第一个柱形图的相关属性
+        function makeECharts01(chartname, colors, series_names, x_list, y1_list, y2_list, seriesName, seriesPercent, stateimg) {
+            var myChart = echarts.init(document.getElementById(chartname));
+            console.log(y2_list);
+            y2_list = y2_list.map(function (item, idnex, y2_list) {
+                return item * 10 + Math.floor(Math.random() * 10);
+            });
+            y1_list = y1_list.map(function (item, idnex, y1_list) {
+                return item * 10 + Math.floor(Math.random() * 10);
+            });
+            var option = {
+                color: colors,  //['#ff9d0b','#ffe1b5'],
+                backgroundColor: "#1f2023",
+                tooltip: {
+                    trigger: 'axis'
+                },
+                grid: {
+                    top: '4%',
+                    left: '2%',
+                    right: '2%',
+                    bottom: '4%',
+                    containLabel: true
+                },
+
+                //增加的legend
+                legend: {
+
+                    show: false,
+                    padding: 10,    // [5, 10, 15, 20]
+                    itemGap: 20,
+                    textStyle: { color: 'red' },
+                    data: [
+                        {
+                            name: '商品数量',
+
+                            textStyle: { fontWeight: 'bold', color: 'green' }
+                        },
+                        {
+                            name: '订单总量',
+
+                            textStyle: { fontWeight: 'bold', color: 'green' }
+                        }
+
+                    ]
+                },
+                xAxis: {
+                    type: 'category',
+                    boundaryGap: ['10%', '10%'],
+                    data: x_list,
+                    axisLabel: {
+                        show: true,
+                        interval: 0,
+
+                        margin: 8,
+
+                        textStyle: {
+                            color: 'white',
+                            fontFamily: 'sans-serif',
+                            fontSize: 12,
+                        }
+                    },
+                    splitLine: {
+                        lineStyle: {
+                            color: ['#363636'],
+                            width: 1,
+                            type: 'solid'
+                        }
+                    }
+                },
+                yAxis: [{
+                    type: 'value',
+                    position: 'left',
+                    boundaryGap: [0, 0.1],
+                    axisLabel: {
+                        show: true,
+                        interval: 'auto',
+
+                        margin: 8,
+                        formatter: '{value}',
+                        textStyle: {
+                            color: '#c2c2c2',
+                            fontFamily: 'sans-serif',
+                            fontSize: 12,
+
+                        }
+                    },
+                    splitLine: {
+                        lineStyle: {
+                            color: ['#363636'],
+                            width: 1,
+                            type: 'solid'
+                        }
+                    }
+                }, {
+                    type: 'value',
+                    boundaryGap: [0, 0.1],
+                    axisLabel: {
+                        show: true,
+                        interval: 'auto',
+
+                        margin: 8,
+                        formatter: function (value) {
+
+                            return value
+                        },
+                        textStyle: {
+                            color: '#c2c2c2',
+                            fontFamily: 'sans-serif',
+                            fontSize: 12,
+                        }
+                    },
+                    splitLine: {
+                        lineStyle: {
+                            color: ['#363636'],
+                            width: 1,
+                            type: 'solid'
+                        }
+                    }
+                }],
+                series: [
+                    {
+                        name: series_names[0],
+                        type: 'bar',
+                        // stack: '0',
+                        barGap: '10%',
+                        barCategoryGap: '40%',
+                        data: y2_list,
+                        yAxisIndex: 1,
+                        itemStyle: {
+                            normal: {
+                                color: '#be4948',
+                                label: {
+                                    show: false,//这里是数据显示的关键
+                                    position: 'top',
+                                    formatter: y1_list
+                                }
+                            }
+                        },
+                        barWidth: '66px',
+                        //系列中的数据标注内容  
+                        markPoint: {
+                        },
+                        //系列中的数据标线内容  
+                        // markLine: {  
+                        //     data: [  
+                        //         {type: 'average', name: '平均值'}  
+                        //     ]  
+                        // }
+                    },
+                    {
+                        name: series_names[1],
+                        type: 'line',
+                        // stack: '1',
+                        data: y1_list,
+                        itemStyle: {
+                            normal: {
+                                color: '#dd9a35',
+                                label: {
+                                    show: true,
+                                    // position: 'outer',
+                                    formatter: y2_list
+                                }
+                            }
+                        },
+                    }
+                ]
+            };
+
+            // 使用刚指定的配置项和数据显示图表。
+            myChart.setOption(option);
+        }
+        //画第一个柱形图
+        function useECharts01() {
+
+            $.ajax({
+                url: 'http://zmonitor.yfway.com/admin.php?s=/Api/data/func/6',
+                type: 'get',
+                dataType: 'jsonp',
+                success: function (res) {
+
+
+                    console.log(res);
+                    let weekSale = 0, weekTotal = 0;
+                    for (let i = 0; i < res.series1.length; i++) {
+                        weekSale += res.series3[i] * 10 + Math.floor(Math.random() * 10);
+                        weekTotal += res.series2[i] * 10 + Math.floor(Math.random() * 10);
+                    }
+                    let week_total=handleData(weekTotal);
+                    let week_sale=handleData(weekSale);
+                    $('.data-number').eq(2).html(week_total);
+                    $('.data-number').eq(3).html(week_sale);
+                    console.log(weekSale);
+                    console.log(weekTotal);
+                    makeECharts01("echarts-bar", ['#ff9d0b', '#ffe1b5'], ["商品数量", "订单总量"], res.x, res.series3, res.series2);
+                }
+            });
+        }
+
+        //配置第二个柱形图
+        function makeECharts02(deal_list) {
+            var myChart = echarts.init(document.getElementById('echarts-pie'));
+
+            var option = {
+                // title: {
+                //     text: '世界人口总量',
+                //     subtext: '数据来自网络'
+                // },
+                tooltip: {
+                    trigger: 'axis'
+                },
+
+                series: [
+                    {
+                        name: '金字塔',
+                        type: 'funnel',
+                        x: '15%',
+                        sort: 'ascending',
+                        itemStyle: {
+                            normal: {
+                                color: function (value) {
+                                    if (value.data.value == 30) {
+                                        return '#86cfd8';
+                                    } else if (value.data.value == 60) {
+                                        return '#4391d9';
+                                    } else {
+                                        return '#be4948';
+                                    }
+                                },
+                                label: {
+                                    position: 'right',
+
+                                    show: true,
+                                    // position: 'outer',
+                                    formatter: { name }
+                                },
+
+
+                            },
+
+                        },
+                        data: [
+                            { value: 90, name: + deal_list[0] },
+                            { value: 60, name: + deal_list[1] },
+                            { value: 30, name: + deal_list[2] }
+
+                        ]
+                    }
+                ]
+
+
+            };
+
+            // 使用刚指定的配置项和数据显示图表。
+            myChart.setOption(option);
+        };
+        //画第二个柱形图
+        function useECharts02() {
+            $.ajax({
+                url: 'http://zmonitor.yfway.com/admin.php?s=/Api/data/func/8',
+                type: 'get',
+                dataType: 'jsonp',
+                success: (res) => {
+                    console.log(res);
+                    // console.log(res[3]);
+                    let data_barS = [res[3] * 2, res[5] * 2, res[8] * 2];
+                    makeECharts02(data_barS);
+                }
+            });
+        }
+        //请求分销收益top10的数据
+        function getSaleDailyData() {
+            $.ajax({
+                url: 'http://zmonitor.yfway.com/admin.php?s=/Api/data/func/7',
+                type: 'get',
+                dataType: 'jsonp',
+                success: (res) => {
+                    console.log(res);
+                    useSaleDailuData(res);
+                }
+            });
+        }
+        //使用分销收益top10的数据，显示，间隔时间刷新
+        function useSaleDailuData(data) {
+            console.log(data);
+
+
+
+            let dom_top10 = '';
+            for (let i = 0; i < data.length; i++) {
+                dom_top10 += `<div class="swiper-slide item" style="font-size:34px;">
+                                    <div class="user-box">
+                                        <div class="rank rank_img`+i+`">
+                                            <img src="./images/rank0`+ (i + 1) + `.png" alt="">
+                                        </div>
+                                        <div class="user-img">
+                                            <img src="`+ data[i].avatarurl + `" alt="">
+                                        </div>
+                                        <div class="user-name">`+ data[i].nickname + `</div>
+                                        <div class="bonus">`+ data[i].sales + `</div>
+                                    </div>
+                                </div>`
+                // $(shareHd).append($(dom_top10));
+            }
+            let total_dom = `<div class="echarts-title02" id="share-sale"></div>
+            <div class="swiper-container rank-num">
+                            <div class="swiper-wrapper hook01">` + dom_top10 + '</div></div>'
+            // console.log(total_dom);
+            $('#top10').html(total_dom);
+            let shareSale = '分销收益TOP' + data.length;
+            $('#share-sale').html(shareSale);
+            // if (flag===true) {
+
+            //     console.log("好的");
+            //     console.log("zheli:",mySwiper);
+            //     mySwiper.removeAllSlides()
+            // }
+            mySwiper = new Swiper('.swiper-container.rank-num', {
+                // autoplay: true,
+                slidesPerView: 7,
+                speed: 1500,
+                autoplay: 300,
+                loop: true,
+                // centeredSlides: true,
+                // slidesPerGroup: 5,
+                // observer:true
+            });
+
+            // console.log(mySwiper);
+        }
+        //请求圣诞火拼的数据
+        function getChristmasData() {
+            console.log('zhedoubuxing');
+            $.ajax({
+                url: 'http://zmonitor.yfway.com/admin.php?s=/Api/data/func/10',
+                type: 'get',
+                dataType: 'jsonp',
+                // jsonp:'jsonpCallback',
+                // jsonpCallback:'success_jsonpCallback',
+                success: function (res) {
+                    console.log(res);
+                    useChristmasData(res)
+                },
+            });
+        }
+        //使用圣诞火拼的数据
+        function useChristmasData(data) {
+            console.log(data);
+            let dom_christmas = '';
+            for (let i = 0; i < data.length; i++) {
+                dom_christmas += `<div class="swiper-slide item2" style="font-size:34px;">
+                                            <div class="team-container">
+                                                <img src="`+ data[i].cover + `" alt="">
+                                                <div class="team-num count">`+ data[i].member_count + `人团</div>
+                                                <div class="team-er">
+                                                    <img src="./images/er.png" alt="">
+                                                </div>
+                                            </div>
+                                    </div>`
+            }
+            let total_dom = `<div class="echarts-title02">圣诞火拼</div>
+                        <div class="swiper-container rank-num2">
+                            <div class="swiper-wrapper hook02">`+ dom_christmas + ' </div></div>'
+            $('#christmas').html(total_dom);
+            mySwiper2 = new Swiper('.swiper-container.rank-num2', {
+                // autoplay: true,
+                slidesPerView: 4,
+                // speed: 600,
+                autoplay: 5000,
+                loop: true,
+            });
+        }
+        //请求一周热销排行榜的数据
+        function getHotSaleData() {
+            // console.log('zhedoubuxing');
+            $.ajax({
+                url: 'http://zmonitor.yfway.com/admin.php?s=/Api/data/func/11',
+                type: 'get',
+                dataType: 'jsonp',
+                // jsonp:'jsonpCallback',
+                // jsonpCallback:'success_jsonpCallback',
+                success: function (res) {
+                    console.log(res[0]);
+                    useHotSaleData(res)
+                },
+            });
+        }
+        //使用一周热销排行榜的数据
+        function useHotSaleData(data) {
+            console.log(data);
+            let dom_hotsale = '';
+            for (let i = 0; i < data.length; i++) {
+                dom_hotsale += ` <div class="swiper-slide item3" style="font-size:34px;">
+                                            <div class="sale-rank sale-rank`+i+`">
+                                                <img src="./images/rank0`+ (i + 1) + `.png" alt="">
+                                            </div>
+                                            <div class="sale-image" id="`+('image'+i)+`">
+                                                <img src="`+ data[i].url + `" alt="">
+                                            </div>
+                                            <div class="sale-content">
+                                                <div class="sale-title">`+ data[i].nickname + `</div>
+                                                <div class="sale-little-title">`+ data[i].name + `</div>
+                                                <div class="sale-bonus">`+ data[i].price + `</div>
+                                            </div>
+
+                                        </div>`
+            }
+            let total_dom = `<div class="echarts-title02">一周热销排行榜</div>
+                    <div class="swiper-container rank-num3">
+                        <div class="swiper-wrapper hook03">`+ dom_hotsale + `</div></div>`;
+            $('#hotsale').html(total_dom);
+            mySwiper3 = new Swiper('.swiper-container.rank-num3', {
+                // autoplay: true,
+                direction: 'vertical',
+                slidesPerView: 4,
+                // speed: 600,
+                autoplay: 10000,
+                loop: true,
+            });
+            flag = true;
+        }
+        //启动所有函数
+        function start() {
+            console.log("shuaxinle");
+
+            useECharts01();
+            getHeadNum();
+            useECharts02();
+            getChristmasData();
+            getSaleDailyData();
+            getHotSaleData();
+
+
+        }
+        $(document).ready(function () {
+            // setInterval(start, 600000);
+
+            start();
+
+            setInterval(start, 600000);
+        });
+    </script>
+</body>
+
+</html>
