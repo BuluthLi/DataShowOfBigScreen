@@ -197,7 +197,7 @@
         }
         //数字处理函数
         function handleData(num) {
-            num=num.toString();
+            num = num.toString();
             // console.log(num)
             //没处理一次，后三个数据就不需要处理了
             for (var i = 0; i < Math.floor((num.length - (1 + i)) / 3); i++) {
@@ -211,7 +211,7 @@
         function useHeadData(res) {
             let total_num = handleData(res.user_totle * 10 + Math.floor(Math.random() * 10));
             let add_num = handleData(res.user_add * 10 + Math.floor(Math.random() * 10));
-            console.log('数据：',total_num,add_num);
+            console.log('数据：', total_num, add_num);
             $('.data-number').eq(0).html(total_num);
             $('.data-number').eq(1).html(add_num);
 
@@ -405,8 +405,8 @@
                         weekSale += res.series3[i] * 10 + Math.floor(Math.random() * 10);
                         weekTotal += res.series2[i] * 10 + Math.floor(Math.random() * 10);
                     }
-                    let week_total=handleData(weekTotal);
-                    let week_sale=handleData(weekSale);
+                    let week_total = handleData(weekTotal);
+                    let week_sale = handleData(weekSale);
                     $('.data-number').eq(2).html(week_total);
                     $('.data-number').eq(3).html(week_sale);
                     console.log(weekSale);
@@ -509,7 +509,7 @@
             for (let i = 0; i < data.length; i++) {
                 dom_top10 += `<div class="swiper-slide item" style="font-size:34px;">
                                     <div class="user-box">
-                                        <div class="rank rank_img`+i+`">
+                                        <div class="rank rank_img`+ i + `">
                                             <img src="./images/rank0`+ (i + 1) + `.png" alt="">
                                         </div>
                                         <div class="user-img">
@@ -572,7 +572,7 @@
                                                 <img src="`+ data[i].cover + `" alt="">
                                                 <div class="team-num count">`+ data[i].member_count + `人团</div>
                                                 <div class="team-er">
-                                                    <img src="`+ data[i].url_code+`" alt="">
+                                                    <img src="`+ data[i].url_code + `" alt="">
                                                 </div>
                                             </div>
                                     </div>`
@@ -610,10 +610,10 @@
             let dom_hotsale = '';
             for (let i = 0; i < data.length; i++) {
                 dom_hotsale += ` <div class="swiper-slide item3" style="font-size:34px;">
-                                            <div class="sale-rank sale-rank`+i+`">
+                                            <div class="sale-rank sale-rank`+ i + `">
                                                 <img src="./images/rank0`+ (i + 1) + `.png" alt="">
                                             </div>
-                                            <div class="sale-image" id="`+('image'+i)+`">
+                                            <div class="sale-image" id="`+ ('image' + i) + `">
                                                 <img src="`+ data[i].url + `" alt="">
                                             </div>
                                             <div class="sale-content">
